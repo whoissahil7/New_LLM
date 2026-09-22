@@ -1,0 +1,46 @@
+# Defaults from the architecture spec. "tunable: true" values are searched on the
+# DEV split by tune.py; the final chosen values are what run_all.py should use on
+# TEST. Nothing here is an experimental result — these are starting points.
+
+dataset: scifact
+cache_dir: ./data
+seed: 42                     # fixed and logged (not tuned)
+
+# --- retrieval ---
+K: 50                        # first-stage candidates      (tunable: 50-100)
+rrf_k: 60                    # RRF constant
+retrieval_gate_recall_at_K: 0.85   # gate; comparison invalid below this (fixed)
+
+# --- fusion / gate (S3) ---
+alpha: 0.7                   # weight on relevance         (tunable)
+beta: 0.3                    # weight on faithfulness      (tunable; alpha+beta=1)
+tau_f: 0.50                  # faithfulness gate threshold (tunable)
+lam: 0.25                    # soft-gate penalty           (tunable)
+gate: soft                   # soft | hard | off           (tunable, categorical)
+
+# --- faithfulness sub-signal weights ---
+w1: 0.45                     # entailment                  (tunable)
+w2: 0.20                     # self-containment            (tunable)
+w3: 0.20                     # corpus agreement            (tunable)
+w4: 0.15                     # source reliability          (tunable; DISABLED on scifact)
+use_source_reliability: false      # no publisher/date/version metadata in SciFact
+agreement_cap: 10            # cap pairwise NLI for corpus-agreement cost
+
+# --- context selection ---
+N: 5                         # chunks sent to the LLM      (fixed across systems)
+lambda_mmr: 0.5              # MMR relevance/diversity trade-off
+token_budget: 1200           # whitespace-token budget for the context block
+
+# --- generation ---
+generator_backend: hf        # hf | vllm | openai
+generator_model: Qwen/Qwen2.5-7B-Instruct
+temperature: 0.0             # fixed (0.0-0.2 allowed)
+max_new_tokens: 256
+
+# --- models ---
+dense_model: BAAI/bge-m3
+reranker_model: BAAI/bge-reranker-v2-m3
+nli_model: MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli
+
+# --- evaluation ---
+faith_entail_threshold: 0.5  # entailment prob below which an answer counts hallucinated

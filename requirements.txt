@@ -1,0 +1,26 @@
+# Core numerics (only these are needed for tests/test_core.py)
+numpy>=1.24
+scipy>=1.10
+pandas>=2.0
+pyyaml>=6.0
+
+# Data
+datasets>=2.18            # HF allenai/scifact (corpus, claims, rationales)
+beir>=2.0.0               # BEIR scifact retrieval qrels
+
+# Retrieval
+sentence-transformers>=2.7   # dense encoder (BAAI/bge-m3)
+faiss-cpu>=1.7.4             # ANN index  (use faiss-gpu if available)
+rank-bm25>=0.2.2            # sparse retrieval
+
+# Reranking + entailment
+FlagEmbedding>=1.2.10      # BAAI/bge-reranker-v2-m3 (FlagReranker)
+transformers>=4.40         # DeBERTa NLI + HF generator
+torch>=2.1                 # backend for the above
+
+# Generation (choose one backend)
+# vllm>=0.4                # optional, faster generation
+# openai>=1.0              # optional, OpenAI-compatible endpoint
+
+# Tuning
+optuna>=3.6
